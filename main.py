@@ -4,6 +4,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.scatter import Scatter
 
 from kivy.properties import ListProperty, NumericProperty
 

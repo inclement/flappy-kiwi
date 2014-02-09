@@ -6,6 +6,7 @@
         Button:
             text: 'PLAY FLAPPY KIWI'
             halign: 'center'
+            valign: 'middle'
             font_size: 100
             text_size: self.size
             on_release: root.current = 'game'; game.reset(); game.label_opacity = 0
@@ -25,16 +26,17 @@
         color: (1, 0, 0, 1)
 
 <Kiwi>:
-    source: 'data/logo/kivy-icon-512.png'
     height_frac: 0.5
     size_hint: 0.1, 0.1
-    pos_hint: {'x': 0.05, 'y': self.height_frac}
+    pos_hint: {'x': 0.05, 'y': root.height_frac}
+    source: 'data/logo/kivy-icon-512.png'
+    allow_stretch: True
+    keep_ratio: False
 
 <Pole>:
     size_hint: 0.2, None
     height: Window.size[1]
     pos_hint: {'x': self.dist, 'y': self.hfrac}
-    on_pos_hint: print self.pos_hint
     velocity: -0.4
     canvas:
         Color:

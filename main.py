@@ -21,6 +21,7 @@ class GameManager(ScreenManager):
 class Game(FloatLayout):
     poles = ListProperty([])
     label_opacity = NumericProperty()
+    num = NumericProperty(0)
 
     def __init__(self, *args, **kwargs):
         super(Game, self).__init__(*args, **kwargs)
@@ -46,6 +47,7 @@ class Game(FloatLayout):
         self.ids.kiwi.height_frac = 0.5
         self.ids.kiwi.velocity = 0.05
         self.label_opacity = 1.
+        self.num = 0
         Animation.cancel_all(self)
         Animation(label_opacity=0, duration=1).start(self)
 
@@ -67,6 +69,7 @@ class Game(FloatLayout):
         for pole in self.poles:
             if pole in self.children and pole.dist < -0.2:
                 self.remove_widget(pole)
+                self.num += 0.50001
 
 class Pole(Widget):
     velocity = NumericProperty(-0.1)

@@ -25,6 +25,13 @@ class Game(FloatLayout):
             if self.ids.kiwi.collide_widget(pole):
                 self.reset()
 
+    def reset(self, *args):
+        for pole in self.poles:
+            if pole in self.children:
+                self.remove_widget(pole)
+        self.poles = []
+        self.ids.kiwi.height_frac = 0.5
+
     def spawn_pole(self, *args):
         gap_height = random() * 0.7 + 0.15
         p1 = Pole(hfrac=gap_height+0.15, dist=1.)
@@ -58,23 +65,24 @@ class Pole(Widget):
         print 'now', self.dist
 
 class Kiwi(Image):
-    acceleration = NumericProperty(-0.05)
+    acceleration = NumericProperty(-0.07)
     velocity = NumericProperty(0)
     def on_touch_down(self, touch):
-        self.velocity = 0.7
+        self.velocity = 0.9
 
     def update(self, dt):
         self.velocity += self.acceleration
         self.height_frac += self.velocity*dt + 0.5*self.acceleration*dt**2
         if self.height_frac < 0.:
-            self.height_frac = 0.5
+            self.parent.reset()
+
 
 
 class FlApp(App):
     def build(self):
         g = Game()
         Clock.schedule_interval(g.update, 1./60)
-        Clock.schedule_interval(g.spawn_pole, 2.5)
+        Clock.schedule_interval(g.spawn_pole, 2)
         return g
 
 if __name__ == "__main__":

@@ -9,10 +9,13 @@ from kivy.properties import ListProperty, NumericProperty
 from kivy.clock import Clock
 from kivy.vector import Vector
 
+from kivy.animation import Animation
+
 from random import random
 
 class Game(FloatLayout):
     poles = ListProperty([])
+    label_opacity = NumericProperty()
 
     def update(self, dt):
         self.ids.kiwi.update(dt)
@@ -23,6 +26,9 @@ class Game(FloatLayout):
     def check_collisions(self):
         for pole in self.poles:
             if self.ids.kiwi.collide_widget(pole):
+                print pole.pos, pole.size
+                print self.pos, self.size
+                print 'collide pole resest'
                 self.reset()
 
     def reset(self, *args):
@@ -32,11 +38,14 @@ class Game(FloatLayout):
         self.poles = []
         self.ids.kiwi.height_frac = 0.5
         self.ids.kiwi.velocity = 0.05
+        self.label_opacity = 1.
+        Animation.cancel_all(self)
+        Animation(label_opacity=0, duration=1).start(self)
 
     def spawn_pole(self, *args):
         gap_height = random() * 0.7 + 0.15
-        p1 = Pole(hfrac=gap_height+0.15, dist=1.)
-        p2 = Pole(hfrac=gap_height-0.15-1.0, dist=1.)
+        p1 = Pole(hfrac=gap_height+0.15, dist=1., x=1000)
+        p2 = Pole(hfrac=gap_height-0.15-1.0, dist=1., x=1000)
         self.poles.append(p1)
         self.poles.append(p2)
         self.add_widget(p1)
@@ -60,10 +69,7 @@ class Pole(Widget):
         super(Pole, self).__init__(**kwargs)
 
     def update(self, dt):
-        print 'pole update', self.velocity, self.size
-        print 'start', self.dist
         self.dist += self.velocity*dt
-        print 'now', self.dist
 
 class Kiwi(Image):
     acceleration = NumericProperty(-0.07)
@@ -74,7 +80,8 @@ class Kiwi(Image):
     def update(self, dt):
         self.velocity += self.acceleration
         self.height_frac += self.velocity*dt + 0.5*self.acceleration*dt**2
-        if self.height_frac < 0.:
+        if self.height_frac < -0.1:
+            print 'kiwi RESET'
             self.parent.reset()
 
 

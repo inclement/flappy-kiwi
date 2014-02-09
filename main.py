@@ -31,6 +31,7 @@ class Game(FloatLayout):
                 self.remove_widget(pole)
         self.poles = []
         self.ids.kiwi.height_frac = 0.5
+        self.ids.kiwi.velocity = 0.05
 
     def spawn_pole(self, *args):
         gap_height = random() * 0.7 + 0.15

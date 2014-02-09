@@ -1,0 +1,24 @@
+#:import Window kivy.core.window.Window
+
+<Game>:
+    Kiwi:
+        id: kiwi 
+
+<Kiwi>:
+    source: 'data/logo/kivy-icon-512.png'
+    height_frac: 0.5
+    size_hint: 0.1, 0.1
+    pos_hint: {'x': 0.05, 'y': self.height_frac}
+
+<Pole>:
+    size_hint: 0.2, None
+    height: Window.size[1]
+    pos_hint: {'x': self.dist, 'y': self.hfrac}
+    on_pos_hint: print self.pos_hint
+    velocity: -0.4
+    canvas:
+        Color:
+            rgba: 0, 1, 0, 1
+        Rectangle:
+            size: root.size
+            pos: root.pos

@@ -3,6 +3,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
+from kivy.uix.screenmanager import ScreenManager
 
 from kivy.properties import ListProperty, NumericProperty
 
@@ -13,9 +14,17 @@ from kivy.animation import Animation
 
 from random import random
 
+class GameManager(ScreenManager):
+    pass
+
 class Game(FloatLayout):
     poles = ListProperty([])
     label_opacity = NumericProperty()
+
+    def __init__(self, *args, **kwargs):
+        super(Game, self).__init__(*args, **kwargs)
+        Clock.schedule_interval(self.update, 1./60)
+        Clock.schedule_interval(self.spawn_pole, 2)
 
     def update(self, dt):
         self.ids.kiwi.update(dt)
@@ -26,9 +35,6 @@ class Game(FloatLayout):
     def check_collisions(self):
         for pole in self.poles:
             if self.ids.kiwi.collide_widget(pole):
-                print pole.pos, pole.size
-                print self.pos, self.size
-                print 'collide pole resest'
                 self.reset()
 
     def reset(self, *args):
@@ -81,17 +87,12 @@ class Kiwi(Image):
         self.velocity += self.acceleration
         self.height_frac += self.velocity*dt + 0.5*self.acceleration*dt**2
         if self.height_frac < -0.1:
-            print 'kiwi RESET'
             self.parent.reset()
-
 
 
 class FlApp(App):
     def build(self):
-        g = Game()
-        Clock.schedule_interval(g.update, 1./60)
-        Clock.schedule_interval(g.spawn_pole, 2)
-        return g
+        return GameManager()
 
 if __name__ == "__main__":
     FlApp().run()

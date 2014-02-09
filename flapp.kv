@@ -1,5 +1,19 @@
 #:import Window kivy.core.window.Window
 
+<GameManager>:
+    Screen:
+        name: 'home'
+        Button:
+            text: 'PLAY FLAPPY KIWI'
+            halign: 'center'
+            font_size: 100
+            text_size: self.size
+            on_release: root.current = 'game'; game.reset(); game.label_opacity = 0
+    Screen:
+        name: 'game'
+        Game:
+            id: game
+
 <Game>:
     Kiwi:
         id: kiwi 
